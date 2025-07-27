@@ -6,15 +6,18 @@ import "core:sys/posix"
 main :: proc() {
 	minutes: i64
 	libc.printf("Provide time in minutes\n")
-	libc.scanf("%d", &minutes)
+	if libc.scanf("%d", &minutes) != 1 {
+		libc.printf("Invalid input")
+		return
+	}
 
 	seconds := minutes * 60
-	end_time: libc.time_t = libc.time(nil) + libc.time_t(seconds)
+	end_time := libc.time(nil) + libc.time_t(seconds)
 
-	remain := seconds
+	remain := end_time - libc.time(nil)
 
 	for remain > 0 {
-		// FIXME: desinchronisation, instead: update and then end_time - current_time
+		remain = end_time - libc.time(nil)
 		print_time(&remain, &end_time)
 		posix.sleep(1)
 	}
@@ -22,11 +25,12 @@ main :: proc() {
 	libc.printf("Time is up. \n")
 }
 
-print_time :: proc(remain: ^i64, end_time: ^libc.time_t) {
+print_time :: proc(remain: ^libc.time_t, end_time: ^libc.time_t) {
 	libc.system("clear")
 
-	minutes := remain^ / 60
-	seconds := remain^ % 60
+	h := remain^ / 3600
+	m := (remain^ % 3600) / 60
+	s := remain^ % 60
 	
 	end_tm := libc.localtime(end_time)
 	year_tm := end_tm.tm_year + 1900
@@ -36,9 +40,9 @@ print_time :: proc(remain: ^i64, end_time: ^libc.time_t) {
 	min_tm := end_tm.tm_min
 	sec_tm := end_tm.tm_sec
 
-	libc.printf("Timer ends %d.%02d.%02d\nat %02d:%02d:%02d\n",
-		year_tm, month_tm, day_tm, hour_tm, min_tm, sec_tm)
+	libc.printf("Time left:\n%02d:%02d:%02d\n\n", h, m, s)
 
-	libc.printf("Time left: %02d:%02d\n", minutes, seconds)
+	libc.printf("Timer ends %d.%02d.%02d at %02d:%02d:%02d\n",
+		year_tm, month_tm, day_tm, hour_tm, min_tm, sec_tm)
 
 }
