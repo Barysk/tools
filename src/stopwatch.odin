@@ -32,7 +32,7 @@ print_time :: proc(time_start: ^libc.time_t, time_passed: ^libc.time_t) {
 	m := (time_passed^ % 3600) / 60
 	s := time_passed^ % 60
 
-	libc.printf("Time passed %02d.%02d.%02d\n", h, m, s)
+	libc.printf("Time passed %02d:%02d:%02d\n", h, m, s)
 
 	libc.printf("\nUse <C-c> to terminte\n")
 
