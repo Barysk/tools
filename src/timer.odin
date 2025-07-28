@@ -3,6 +3,10 @@ package timer
 import "core:c/libc"
 import "core:sys/posix"
 
+YELLOW :: "\e[1;93m"
+CYAN :: "\e[1;96m"
+RESET :: "\e[0m"
+
 main :: proc() {
 	minutes: i64
 	libc.printf("Provide time in minutes\n")
@@ -22,7 +26,7 @@ main :: proc() {
 		posix.sleep(1)
 	}
 
-	libc.printf("Time is up. \n")
+	libc.printf(YELLOW + "Time is up." + RESET + "\n")
 }
 
 print_time :: proc(remain: ^libc.time_t, end_time: ^libc.time_t) {
@@ -40,9 +44,9 @@ print_time :: proc(remain: ^libc.time_t, end_time: ^libc.time_t) {
 	min_tm := end_tm.tm_min
 	sec_tm := end_tm.tm_sec
 
-	libc.printf("Time left:\n%02d:%02d:%02d\n\n", h, m, s)
-
-	libc.printf("Timer ends %d.%02d.%02d at %02d:%02d:%02d\n",
+	libc.printf("Timer ends %d.%02d.%02d at %02d:%02d:%02d\n\n",
 		year_tm, month_tm, day_tm, hour_tm, min_tm, sec_tm)
+
+	libc.printf(CYAN + "Time left:\n%02d:%02d:%02d" + RESET + "\n\n", h, m, s)
 
 }
