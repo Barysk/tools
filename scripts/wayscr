@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# This script saves output to both screenshot folder and cllipboard
+# Feel free to modify
+# 2025.08.08 - bk
+
+FILE_NAME="$(date +'%Y-%m-%d-%H-%M-%S')_wayscr.png"
+SAVE_DIR="$HOME/Pictures/screenshots"
+SAVE_FULLPATH="$SAVE_DIR/$FILE_NAME"
+
+GEOMETRY=$(slurp)
+
+if [ -n "$GEOMETRY" ]; then
+	if grim -g "$GEOMETRY" "$SAVE_FULLPATH"; then
+		wl-copy --type image/png < "$SAVE_FULLPATH"
+	fi
+fi
