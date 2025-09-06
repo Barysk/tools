@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Minimalistic script for making fast calculations in terminal
+# bk - 2025.09.06
+
+if [[ -n $1 ]]; then
+	echo "$*" | bc -l
+	exit 0
+fi
+
+clear
+echo Maasu: Input Mode
+
+while :
+do
+	read expr
+	echo "$expr" | bc -l
+	echo -e "\n"
+done

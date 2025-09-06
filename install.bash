@@ -20,9 +20,12 @@ done
 SCRIPTS=(
 	wayscr
 	todoko
+	maasu
 )
 
 sudo pacman -S grim slurp --needed # wayscr dependencies
+
+sudo pacman -S bc --needed # maasu dependencies
 
 for tool in "${SCRIPTS[@]}"; do
     sudo cp "./scripts/$tool" /usr/local/bin/

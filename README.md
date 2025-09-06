@@ -11,4 +11,5 @@
 
 - wayscr - A script that makes an area screenshot, saves it to $HOME/Pictures/screenshots/ and clipboard.
 - todoko - A minimalistic todo helper script
+- maasu - A minimalistic calculator
 
