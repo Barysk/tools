@@ -1,0 +1,63 @@
+#!/bin/sh
+
+# We love todo apps
+# But I just forget about them
+# nothing is better for me than a simple todo.txt
+# And this what this script does
+# just pass your todo note, and it will be added to $HOME/todoko.txt (default)
+# also there will be added info when it was made
+#
+# 2025.09.06 - bk
+
+# name of the note file
+FILE_NAME="todoko.txt"
+
+# Modify this to match folder you wnat to save your FILE_NAME in. ex $HOME/Documents/
+SAVE_DIR="$HOME"
+
+# Here logic starts make changes if you know what you are doing
+SAVE_FULLPATH="$SAVE_DIR/$FILE_NAME"
+
+if [[ $1 == "-h" || $1 == "--help" ]]; then
+	echo '-h typed, help request accepted
+	Usage:
+	adding note manually        : todoko "buy gorceries"    //if " is not closed -> you can use enter to have a new line
+	adding a todo note auto     : todoko "buy gorceries" "sign some docs" "write a mail"    //basicly pass more than one argument
+	show all notes              : todoko
+	show this message           : todoko -h || todoko --help
+	open file with your $EDITOR : todoko -e'
+	exit 0
+fi
+
+if [[ $1 == "-e" ]]; then
+	$EDITOR $SAVE_FULLPATH
+	echo "Done."
+	exit 0
+fi
+
+if [[ $# -gt 0 ]]; then
+	echo "________[ $(date '+%Y-%m-%d %H:%M:%S') ]_________________________________________________" >> $SAVE_FULLPATH
+fi
+
+if [[ $# -eq 1 ]]; then
+	printf "%s\n" "$1" >> $SAVE_FULLPATH
+	echo -e "\n" >> $SAVE_FULLPATH
+	echo Added!
+	exit 0
+fi
+
+if [[ $# -gt 1 ]]; then
+	for arg in "$@"; do
+		echo -e "[ ] $arg" >> $SAVE_FULLPATH
+	done
+	echo -e "\n" >> $SAVE_FULLPATH
+	echo Added!
+	exit 0
+fi
+
+if [[ ! -f $SAVE_FULLPATH ]]; then
+	echo "You haven't yet added anything, thus file $SAVE_FULLPATH does not exist" >&2
+	exit 1
+fi
+
+cat $SAVE_FULLPATH

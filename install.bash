@@ -19,6 +19,7 @@ done
 
 SCRIPTS=(
 	wayscr
+	todoko
 )
 
 sudo pacman -S grim slurp --needed # wayscr dependencies
