@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # We love todo apps
 # But I just forget about them
@@ -19,13 +19,13 @@ SAVE_DIR="$HOME"
 SAVE_FULLPATH="$SAVE_DIR/$FILE_NAME"
 
 if [[ $1 == "-h" || $1 == "--help" ]]; then
-	echo '-h typed, help request accepted
-	Usage:
-	adding note manually        : todoko "buy gorceries"    //if " is not closed -> you can use enter to have a new line
-	adding a todo note auto     : todoko "buy gorceries" "sign some docs" "write a mail"    //basicly pass more than one argument
-	show all notes              : todoko
-	show this message           : todoko -h || todoko --help
-	open file with your $EDITOR : todoko -e'
+	printf "%s\n  %s\n  %s\n  %s\n  %s\n  %s\n\n" \
+	'Usage:' \
+	'adding note manually        : todoko "buy gorceries"    //if " is not closed -> you can use enter to have a new line' \
+	'adding a todo note auto     : todoko "buy gorceries" "sign some docs" "write a mail"    //basicly pass more than one argument' \
+	'show all notes              : todoko' \
+	'show this message           : todoko -h || todoko --help' \
+	'open file with your $EDITOR : todoko -e'
 	exit 0
 fi
 
