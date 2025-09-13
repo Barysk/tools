@@ -4,12 +4,15 @@
 # bk - 2025-09-07
 
 if [[ "$1" == "-h" || "$1" == "--help" ]]; then
-	printf "%s\n  %s\n  %s\n\n" \
+	printf "%s\n  %s\n  %s\n %s\n\n" \
 		'Usage:' \
-		'lateko - compiles latex in the curent directory and opens preview' \
-		'lateko "version name" - compiles and saves this version to the ./versions/"version name"'
+		'lateku - compiles latex in the curent directory and opens preview' \
+		'lateku "version name" - compiles and saves this version to the ./versions/"version name"' \
+		'lateku "version name" "pdf name"'
 	exit 0
 fi
+
+PDF_NAME="$1.pdf"
 
 if [[ ! -f main.tex ]]; then
 	echo "./main.tex does not exist"
@@ -37,5 +40,10 @@ if [[ -z "$1" ]]; then
 fi
 
 mkdir -p "versions/$1"
-cp ./main.pdf "./versions/$1/$1.pdf"
+if [[ -n "$2" ]]; then
+	PDF_NAME="$2.pdf"
+fi
+
+cp ./main.pdf "./versions/$1/$PDF_NAME"
 cp ./main.tex "./versions/$1/$1.tex"
+
