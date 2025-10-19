@@ -22,6 +22,7 @@ SCRIPTS=(
 	todoko
 	maasu
 	lateku
+	hosuto
 )
 
 sudo pacman -S grim slurp --needed # wayscr dependencies
