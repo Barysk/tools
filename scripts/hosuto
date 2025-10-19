@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+PORT="8000"
+
+echo "You are about to host this folder: $(pwd)"
+echo "Provide server port... [default is $PORT]"
+read port_input
+
+if [[ -n $port_input ]]; then
+	PORT="$port_input"
+fi
+
+echo "starting server at port: $PORT"
+
+python -m http.server "$PORT"
