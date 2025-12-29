@@ -21,7 +21,7 @@ SCRIPTS=(
 	wayscr
 	todoko
 	maasu
-	lateku
+	ratte
 	hosuto
 )
 

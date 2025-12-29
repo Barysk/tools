@@ -1,0 +1,301 @@
+#!/usr/bin/env bash
+
+# script for convinient compiling latex and automaticly versioning
+# bk - 2025-12-29
+
+set -e
+
+show_help() {
+	printf "%s\n  %s\n  %s\n  %s\n  %s\n  %s\n  %s\n  %s\n  %s\n  %s\n  %s\n\n" \
+		"Usage:" \
+		"ratte - compiles main.tex with lualatex and opens preview" \
+		"ratte \"version name\" - compiles and saves main.pdf: ./versions/<version>" \
+		"ratte \"version name\" \"pdf name\"" \
+		"ratte -o  - opens current main.pdf file using xdg-open" \
+		"ratte -sl - shows script location" \
+		"ratte -ls - list verions directory" \
+		"ratte -ml - makes script local to your project, so you can modify it without modyfying source ./ratte" \
+		"ratte -lv \"version dir name\"- loads provided version. (!)deletes current main.tex" \
+		"ratte --new   - creates new main.tex + bibliography.bib templates" \
+		"ratte --clean - cleans the directory from compilation helpers"
+	exit 0
+}
+
+load_version() {
+	if [[ ! -d ./versions/$1 ]]; then
+		echo this version does not yet exist
+		exit 1
+	fi
+
+	cp -f ./versions/$1/*.tex ./main.tex
+	cp -f ./versions/$1/*.pdf ./main.pdf
+
+	echo version loaded
+	exit 0
+}
+
+clean_dir() {
+	rm -f main.aux main.blg main.bbl main.log main.run.xml main.bcf main.out main.toc
+	echo directory cleaned
+	exit 0
+}
+
+make_local() {
+	SCRIPT_PATH="$(readlink -f "$0")"
+
+	cp $SCRIPT_PATH ./ratte.bash
+	echo Done. Script ratte is now in your directory, you can run it with ./ratte
+	exit 0
+}
+
+script_location() {
+	SCRIPT_PATH="$(readlink -f "$0")"
+
+	echo "Script is located at: $SCRIPT_PATH"
+	exit 0
+}
+
+list_versions() {
+	if [[ -d ./versions ]]; then
+		ls ./versions
+	else
+		echo "Versions not yet exists"
+	fi
+}
+
+open_pdf() {
+	if command -v zathura >/dev/null 2>&1; then
+		zathura main.pdf &
+	elif command -v xdg-open >/dev/null 2>&1; then
+		xdg-open main.pdf &
+	elif [[ -n "$BROWSER" ]]; then
+		"$BROWSER" main.pdf &
+	else
+		echo "Warning: No PDF viewer found."
+	fi
+}
+
+compile() {
+	if [[ ! -f main.tex ]]; then
+		echo "main.tex not found — run 'ratte -n' to create a new project."
+		exit 1
+	fi
+
+	echo "Compiling with lualatex…"
+	lualatex -interaction=nonstopmode main.tex
+	biber main
+	lualatex -interaction=nonstopmode main.tex
+}
+
+save_version() {
+	if [[ -z "$1" ]]; then
+		exit 0
+	fi
+
+	mkdir -p "versions/$1"
+	if [[ -n "$2" ]]; then
+		PDF_NAME="$2.pdf"
+	fi
+
+	cp main.pdf "versions/$1/$PDF_NAME"
+	cp main.tex "versions/$1/$1.tex"
+
+	echo "Saved version: versions/$1/$PDF_NAME"
+}
+
+create_new() {
+	echo "Creating default LaTeX project…"
+
+	if [[ -f main.tex || -f bibliography.bib ]]; then
+		echo "Error: main.tex or bibliography.bib already exists."
+		exit 1
+	fi
+
+	cat > main.tex <<'EOF'
+% ===========================
+% LuaLaTeX Template
+% ===========================
+\documentclass[a4paper]{article}
+
+% ---------- Constants ----------
+\newcommand{\SerifFont}{Gentium}
+\newcommand{\SansFont}{M PLUS 2}
+\newcommand{\MonoFont}{IBM 3270}
+\newcommand{\CJKFont}{FOT-Greco Std M} % CJK support remove if unneeded
+\newcommand{\MainFontSize}{12pt}
+\newcommand{\LineSpread}{1.2pt}
+
+\AtBeginDocument{
+	\fontsize{\MainFontSize}{\LineSpread\MainFontSize}\selectfont
+}
+
+% ---------- LuaLaTeX font setup ----------
+\usepackage{fontspec}
+\setmainfont{\SerifFont}
+\setsansfont{\SansFont}
+\setmonofont{\MonoFont}
+
+% CJK support remove if unneeded
+\usepackage{luatexja-fontspec}
+\setmainjfont{\CJKFont}
+\newfontfamily\UseCJKFont{\CJKFont}
+
+
+% fontsizes
+\newcommand{\fsizetiny}[1]{{\fontsize{8pt}{10pt}\selectfont #1}}
+\newcommand{\fsizesmall}[1]{{\fontsize{10pt}{12pt}\selectfont #1}}
+\newcommand{\fsizenormal}[1]{{\fontsize{12pt}{14pt}\selectfont #1}}
+\newcommand{\fsizebig}[1]{{\fontsize{14pt}{17pt}\selectfont #1}}
+\newcommand{\fsizeBig}[1]{{\fontsize{16pt}{20pt}\selectfont #1}}
+\newcommand{\fsizeBIG}[1]{{\fontsize{24pt}{28pt}\selectfont #1}}
+\newcommand{\fsizelarge}[1]{{\fontsize{32pt}{38pt}\selectfont #1}}
+\newcommand{\fsizeLarge}[1]{{\fontsize{48pt}{58pt}\selectfont #1}}
+\newcommand{\fsizeLARGE}[1]{{\fontsize{64pt}{77pt}\selectfont #1}}
+\newcommand{\fsizehuge}[1]{{\fontsize{72pt}{86pt}\selectfont #1}}
+\newcommand{\fsizeHuge}[1]{{\fontsize{92pt}{110pt}\selectfont #1}}
+\newcommand{\fsizeHUGE}[1]{{\fontsize{96pt}{115pt}\selectfont #1}}
+
+
+% ---------- Encoding / Language ----------
+\usepackage{polyglossia}
+\setmainlanguage{polish}
+
+\usepackage{hyperref}
+\usepackage{indentfirst}
+\usepackage{titlesec}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{csquotes}
+\usepackage[backend=biber,bibstyle=ieee,sorting=nty]{biblatex}
+
+\addbibresource{bibliography.bib}
+
+\geometry{
+	a4paper,
+	left=25mm,
+	right=25mm,
+	top=25mm,
+	bottom=25mm,
+}
+
+\widowpenalty=10000
+\clubpenalty=10000
+
+% ---------- Section fonts ----------
+\titleformat{\section}
+{\normalfont\fontsize{14}{16}\bfseries}{\thesection}{1em}{}
+
+\titleformat{\subsection}
+{\normalfont\fontsize{12}{14}\bfseries}{\thesubsection}{1em}{}
+
+\titleformat{\subsubsection}
+{\normalfont\fontsize{12}{14}\itshape}{\thesubsubsection}{1em}{}
+
+\setlength{\parskip}{1em}
+
+\begin{document}
+\pagenumbering{gobble} % remove to have page numbering back
+
+
+\begin{titlepage}
+	\UseCJKFont
+	\centering
+	{\fsizeBig{SUBJECT}\par}
+	{\fsizeBig{WHEN}\par}
+	\vfill
+	{\fsizelarge{\bfseries TITLE}\par}
+	\vfill
+	{\fsizebig{WHO}\par}
+\end{titlepage}
+
+\clearpage
+\tableofcontents
+\clearpage
+
+\section{First Section}
+
+Example text \cite{test1}.
+
+\subsection{Sub Section}
+
+More text \cite{test1, test2}.
+
+\clearpage
+
+\printbibliography[heading=bibintoc, title={Bibliografia}]
+
+\end{document}
+EOF
+
+	cat > bibliography.bib <<'EOF'
+@online{test1,
+	author    = {Test},
+	title     = {Title Test 1},
+	year      = {2025},
+	url       = {https://www.example.com},
+	note      = {Accessed: 2025-11-15}
+}
+
+@online{test2,
+	author    = {Test},
+	title     = {Title Test 2},
+	year      = {2025},
+	url       = {https://www.example.com},
+	note      = {Accessed: 2025-11-15}
+}
+EOF
+
+	echo "Created main.tex and bibliography.bib"
+	exit 0
+}
+
+case "$1" in
+	-*)
+		case "$1" in
+			-h) show_help
+				exit 0
+				;;
+			-o)
+				open_pdf
+				exit 0
+				;;
+			-ls)
+				list_versions
+				exit 0
+				;;
+			--new)
+				create_new
+				exit 0
+				;;
+			-sl)
+				script_location
+				exit 0
+				;;
+			-ml)
+				make_local
+				exit 0
+				;;
+			--clean)
+				clean_dir
+				exit 0
+				;;
+			-lv)
+				load_version $2
+				exit 0
+				;;
+			*)
+				echo Unknown flag
+				exit 1
+				;;
+		esac
+		;;
+	*)
+		compile $1
+		open_pdf
+		save_version $1 $2
+		exit 0
+		;;
+esac
+
+
