@@ -122,6 +122,10 @@ create_new() {
 \newcommand{\SansFont}{M PLUS 2}
 \newcommand{\MonoFont}{IBM 3270}
 \newcommand{\CJKFont}{Noto Serif CJK JP} % CJK support remove if unneeded
+
+\newcommand{\SpecialFont}{vinque rg} % A place for your special font you are going to use once :)
+
+
 \newcommand{\MainFontSize}{12pt}
 \newcommand{\LineSpread}{1.2pt}
 
@@ -140,6 +144,7 @@ create_new() {
 \setmainjfont{\CJKFont}
 \newfontfamily\UseCJKFont{\CJKFont}
 
+\newfontfamily\UseSpecialFont{\SpecialFont} % setup for your very special font
 
 % fontsizes
 \newcommand{\fsizetiny}[1]{{\fontsize{8pt}{10pt}\selectfont #1}}
@@ -183,7 +188,7 @@ create_new() {
 \widowpenalty=10000
 \clubpenalty=10000
 
-\setcounter{secnumdepth}{0} % modify to adjust sections numbering
+\setcounter{secnumdepth}{0} % modify to adjust sections numbering -- currently no numbering
 
 % ---------- Section fonts ----------
 \titleformat{\section}
@@ -202,7 +207,7 @@ create_new() {
 
 
 \begin{titlepage}
-	\UseCJKFont
+	\UseSpecialFont
 	\centering
 	{\fsizeBig{SUBJECT}\par}
 	{\fsizeBig{WHEN}\par}
