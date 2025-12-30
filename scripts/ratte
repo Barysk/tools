@@ -121,7 +121,7 @@ create_new() {
 \newcommand{\SerifFont}{Gentium}
 \newcommand{\SansFont}{M PLUS 2}
 \newcommand{\MonoFont}{IBM 3270}
-\newcommand{\CJKFont}{FOT-Greco Std M} % CJK support remove if unneeded
+\newcommand{\CJKFont}{Noto Serif CJK JP} % CJK support remove if unneeded
 \newcommand{\MainFontSize}{12pt}
 \newcommand{\LineSpread}{1.2pt}
 
@@ -159,14 +159,15 @@ create_new() {
 % ---------- Encoding / Language ----------
 \usepackage{polyglossia}
 \setmainlanguage{polish}
+\PolyglossiaSetup{polish}{indentfirst=true}
 
 \usepackage{hyperref}
-\usepackage{indentfirst}
 \usepackage{titlesec}
 \usepackage{float}
 \usepackage{graphicx}
 \usepackage{geometry}
 \usepackage{csquotes}
+\usepackage{microtype}
 \usepackage[backend=biber,bibstyle=ieee,sorting=nty]{biblatex}
 
 \addbibresource{bibliography.bib}
@@ -181,6 +182,8 @@ create_new() {
 
 \widowpenalty=10000
 \clubpenalty=10000
+
+\setcounter{secnumdepth}{0} % modify to adjust sections numbering
 
 % ---------- Section fonts ----------
 \titleformat{\section}
