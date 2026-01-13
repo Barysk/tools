@@ -83,7 +83,9 @@ compile() {
 
 	echo "Compiling with lualatex…"
 	lualatex -interaction=nonstopmode main.tex
-	biber main
+	if [[ -f ./bibliography.bib ]]; then
+		biber main
+	fi
 	lualatex -interaction=nonstopmode main.tex
 }
 
