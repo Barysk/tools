@@ -169,10 +169,28 @@ create_new() {
 \newcommand{\subtell}[1]{`#1'}
 
 
-% macro for images (RENAME)
+% macro for images
 % usage: \addimg[0.7]{./path/to/image.png}
 % usage: \addimg{./path/to/image.png}      % if no size provided -- defaults to one
 \newcommand{\addimg}[2][1.0]{\noindent\includegraphics[width=#1\textwidth]{#2}}
+
+
+% macro for figures
+% usage: \addfig{!htp}{1.0}{./IMage.png}{A caption for image}{fig:i_mage_image}
+% args
+% #1 = placement !h | !htp | ...
+% #2 = width(fraction of linewidth)
+% #3 = path/to/image
+% #4 = caption
+% #5 = fig:label
+\newcommand{\addfig}[5]{%
+  \begin{figure}[#1]
+    \centering
+    \includegraphics[width=#2\linewidth]{#3}
+    \caption{#4}
+    \label{#5}
+  \end{figure}
+}
 
 
 % ---------- Encoding / Language ----------
