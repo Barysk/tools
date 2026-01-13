@@ -175,22 +175,22 @@ create_new() {
 \newcommand{\addimg}[2][1.0]{\noindent\includegraphics[width=#1\textwidth]{#2}}
 
 
-% macro for figures
-% usage: \addfig{!htp}{1.0}{./IMage.png}{A caption for image}{fig:i_mage_image}
-% args
-% #1 = placement !h | !htp | ...
-% #2 = width(fraction of linewidth)
-% #3 = path/to/image
-% #4 = caption
-% #5 = fig:label
-\newcommand{\addfig}[5]{%
-  \begin{figure}[#1]
-    \centering
-    \includegraphics[width=#2\linewidth]{#3}
-    \caption{#4}
-    \label{#5}
-  \end{figure}
-}
+% % macro for figures [Uncomment if you want to use it]
+% % usage: \addfig{./img/yang.png}{some things}{fig:yang_img}{0.8}{!htp}
+% % args
+% % #1 = path/to/image
+% % #2 = caption
+% % #3 = fig:label
+% % #4 = width(fraction of linewidth)
+% % #5 = placement !h | !htp | ...
+% \newcommand{\addfig}[5]{
+% 	\begin{figure}[#5]
+% 		\centering
+% 		\addimg[#4]{#1}
+% 		\caption{#2}
+% 		\label{#3}
+% 	\end{figure}
+% }
 
 
 % ---------- Encoding / Language ----------
