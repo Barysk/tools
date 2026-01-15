@@ -129,23 +129,23 @@ create_new() {
 
 
 \newcommand{\MainFontSize}{12pt}
-\newcommand{\LineSpread}{1.2pt}
+\newcommand{\LineSpread}{1.2}
 
 \AtBeginDocument{
 	\fontsize{\MainFontSize}{\LineSpread\MainFontSize}\selectfont
 }
 
 % ---------- LuaLaTeX font setup ----------
+\usepackage{luatexja}
+\usepackage{luatexja-fontspec}
 \usepackage{fontspec}
+
 \setmainfont{\SerifFont}
 \setsansfont{\SansFont}
 \setmonofont{\MonoFont}
-
-% CJK support remove if unneeded
-\usepackage{luatexja-fontspec}
 \setmainjfont{\CJKFont}
-\newfontfamily\UseCJKFont{\CJKFont}
 
+\newfontfamily\UseCJKFont{\CJKFont}
 \newfontfamily\UseSpecialFont{\SpecialFont} % setup for your very special font
 
 % fontsizes
@@ -193,7 +193,7 @@ create_new() {
 % }
 
 
-% ---------- Encoding / Language ----------
+% ---------- Encoding / Language / Packages ----------
 \usepackage{polyglossia}
 \setmainlanguage{polish}
 \PolyglossiaSetup{polish}{indentfirst=true}
@@ -259,12 +259,14 @@ create_new() {
 \begin{titlepage}
 	\UseSpecialFont
 	\centering
-	{\fsizeBig{SUBJECT}\par}
-	{\fsizeBig{WHEN}\par}
+	{\fsizeBIG{where}\par}
+	{\fsizeBig{date}\par}
 	\vfill
-	{\fsizelarge{\bfseries TITLE}\par}
+	{\fsizelarge{subject}\par}
+	{\fsizeBIG{topic}\par}
 	\vfill
-	{\fsizebig{WHO}\par}
+	{\fsizeBIG{who}\par}
+	{\fsizeBig{id}\par}
 \end{titlepage}
 
 \clearpage
