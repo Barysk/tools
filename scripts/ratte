@@ -207,6 +207,13 @@ create_new() {
 \usepackage{csquotes}
 \usepackage{microtype}
 \usepackage[backend=biber,bibstyle=ieee,sorting=nty]{biblatex}
+\usepackage{ragged2e}
+% Alignment  ragged2e environment  ragged2e switch command
+% Left       FlushLeft             \RaggedRight
+% Right      FlushRight            \RaggedLeft
+% Centre     Center                \Centering
+% Fully      justify               \justifying
+
 
 \addbibresource{bibliography.bib}
 
